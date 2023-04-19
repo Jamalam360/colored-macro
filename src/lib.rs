@@ -2,7 +2,9 @@ use ansi::RESET;
 use parser::Element;
 use syn::{
     parse::{Parse, ParseStream, Result},
-    parse_macro_input, LitStr, token::Comma, Expr,
+    parse_macro_input,
+    token::Comma,
+    Expr, LitStr,
 };
 
 use crate::{ansi::style_to_ansi_code, parser::parse_tags};
@@ -122,6 +124,6 @@ pub fn colored(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     }
 
     // Close the `format!` call
-    output.push_str(")");
+    output.push(')');
     output.parse().unwrap()
 }

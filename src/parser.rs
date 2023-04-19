@@ -13,12 +13,12 @@ pub(crate) enum Element {
 
 /// Parses a string literal into a vector of `Element`s.
 pub(crate) fn parse_tags(input: String) -> Vec<Element> {
-    let mut c = input.chars();
+    let c = input.chars();
     let mut elements = Vec::new();
     let mut current = String::new();
     let mut in_tag = false;
 
-    while let Some(c) = c.next() {
+    for c in c {
         if c == '<' {
             if !current.is_empty() {
                 elements.push(Element::Text(current));
@@ -28,8 +28,8 @@ pub(crate) fn parse_tags(input: String) -> Vec<Element> {
             in_tag = true;
         } else if c == '>' {
             if in_tag {
-                if current.starts_with('/') {
-                    elements.push(Element::End(current[1..].to_string()));
+                if let Some(stripped) = current.strip_prefix('/') {
+                    elements.push(Element::End(stripped.to_string()));
                 } else {
                     elements.push(Element::Start(current));
                 }
