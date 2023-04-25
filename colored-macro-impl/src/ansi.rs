@@ -4,7 +4,7 @@ pub const RESET: &str = "\x1b[0m";
 
 /// Converts a style like `red`, `bold`, or `#ff0000` to an ANSI code.
 /// Non-text styles like `bold` and `underline` are handled manually, while colors are handled according to the CSS spec.
-pub(crate) fn style_to_ansi_code(style: String) -> String {
+pub fn style_to_ansi_code(style: String) -> String {
     match style.parse::<Srgb>() {
         Ok(color) => {
             if color.alpha != 1.0 {

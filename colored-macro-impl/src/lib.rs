@@ -1,8 +1,8 @@
 use ansi::RESET;
 use parser::Element;
+use proc_macro2::TokenStream;
 use syn::{
     parse::{Parse, ParseStream, Result},
-    parse_macro_input,
     token::Comma,
     Expr, LitStr,
 };
@@ -13,22 +13,22 @@ mod ansi;
 mod parser;
 
 /// A segment is like a token, it can either be optionally styled text or a style end tag.
-#[derive(Debug)]
-enum Segment {
+#[derive(Debug, PartialEq)]
+pub enum Segment {
     /// (Style, Text)
     Text(Option<String>, String),
     /// (Style)
     StyleEnd(String),
 }
 
-#[derive(Debug)]
-struct Colored {
+#[derive(Debug, PartialEq)]
+pub struct Colored {
     /// The segments of the string literal.
     /// A segment is like a token, it can either be optionally styled text or a style end tag.
-    segments: Vec<Segment>,
+    pub segments: Vec<Segment>,
     /// Arguments passed after the string literal (e.g. `colored!("Hello, {}!", "world")`, `"world"` is a format argument).
     /// This only includes arguments that literally appear after the comma, not inline arguments like `{name}`.
-    format_args: Vec<String>,
+    pub format_args: Vec<String>,
 }
 
 impl Parse for Colored {
@@ -66,9 +66,7 @@ impl Parse for Colored {
     }
 }
 
-#[proc_macro]
-pub fn colored(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    let colored = parse_macro_input!(input as Colored);
+pub fn process(colored: Colored) -> TokenStream {
     let mut fmt_string = String::new();
     let mut style_stack = Vec::new();
 

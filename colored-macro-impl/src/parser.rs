@@ -1,6 +1,6 @@
 #[derive(Debug)]
 /// An element in the string literal.
-pub(crate) enum Element {
+pub enum Element {
     /// A tag that starts a style.
     /// <red>
     Start(String),
@@ -12,7 +12,7 @@ pub(crate) enum Element {
 }
 
 /// Parses a string literal into a vector of `Element`s.
-pub(crate) fn parse_tags(input: String) -> Vec<Element> {
+pub fn parse_tags(input: String) -> Vec<Element> {
     let c = input.chars();
     let mut elements = Vec::new();
     let mut current = String::new();
