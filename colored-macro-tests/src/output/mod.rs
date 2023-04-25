@@ -21,8 +21,7 @@ macro_rules! function {
 macro_rules! test {
     ($input: literal) => {
         let function_name = function!();
-        let expected =
-            fs::read_to_string(format!("src/output/{}.stdout", function_name))
+        let expected = fs::read_to_string(format!("src/output/{}.stdout", function_name))
             .unwrap()
             .replace("\\n", "\n")
             .replace("\\u{1b}", "\u{1b}");

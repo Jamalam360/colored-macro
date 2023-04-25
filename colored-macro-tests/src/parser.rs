@@ -1,4 +1,4 @@
-use colored_macro_impl::{Segment, Colored};
+use colored_macro_impl::{Colored, Segment};
 
 macro_rules! colored {
     ($segments: expr) => {
@@ -34,7 +34,9 @@ macro_rules! end {
 
 macro_rules! parses_to {
     ($input: literal, $expected: expr) => {
-        let tokens = format!("\"{}\"", $input).parse::<proc_macro2::TokenStream>().unwrap();
+        let tokens = format!("\"{}\"", $input)
+            .parse::<proc_macro2::TokenStream>()
+            .unwrap();
         assert_eq!(syn::parse2::<Colored>(tokens).unwrap(), $expected)
     };
 }
@@ -51,20 +53,37 @@ fn parse_empty_string() {
 
 #[test]
 fn parse_simple() {
-    parses_to!("<red>test</red>", colored!(vec![text!("test", "red"), end!("red")]));
+    parses_to!(
+        "<red>test</red>",
+        colored!(vec![text!("test", "red"), end!("red")])
+    );
 }
 
 #[test]
 fn parse_nested() {
-    parses_to!("<red><green>test</green></red>", colored!(vec![text!("test", "green"), end!("green"), end!("red")]));
+    parses_to!(
+        "<red><green>test</green></red>",
+        colored!(vec![text!("test", "green"), end!("green"), end!("red")])
+    );
 }
 
 #[test]
 fn parse_nested_more() {
-    parses_to!("<red>red <green>green</green></red>", colored!(vec![text!("red ", "red"), text!("green", "green"), end!("green"), end!("red")]));
+    parses_to!(
+        "<red>red <green>green</green></red>",
+        colored!(vec![
+            text!("red ", "red"),
+            text!("green", "green"),
+            end!("green"),
+            end!("red")
+        ])
+    );
 }
 
 #[test]
 fn parse_nested_then_unnested() {
-    parses_to!("<red>red</red> nothing", colored!(vec![text!("red", "red"), end!("red"), text!(" nothing")]));
+    parses_to!(
+        "<red>red</red> nothing",
+        colored!(vec![text!("red", "red"), end!("red"), text!(" nothing")])
+    );
 }

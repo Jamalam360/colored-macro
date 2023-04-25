@@ -1,4 +1,4 @@
 #![allow(unused)]
 
-mod parser;
 mod output;
+mod parser;
