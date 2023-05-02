@@ -1,6 +1,6 @@
 [package]
-name = "colored-macro"
-description = "A macro to make colored text in the terminal using XML-like syntax"
+name = "colored-macro-macro"
+description = "A macro to make colored text in the terminal using XML-like syntax. You should depend on the `colored-macro` crate instead."
 authors = ["Jamalam <james@jamalam.tech>"]
 repository = "https://github.com/Jamalam360/colored-macro"
 categories = [
@@ -10,7 +10,7 @@ categories = [
 ]
 
 edition = "2021"
-version = "0.1.0"
+version.workspace = true
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -19,5 +19,7 @@ license = "MIT"
 proc-macro = true
 
 [dependencies]
-colored-macro-impl = { path = "../colored-macro-impl" }
-syn.workspace = true
+colored-macro-impl = { version = "=0.2.0", path = "../impl" }
+proc-macro2 = "1.0"
+quote = "1.0"
+syn = { version = "2.0", features = ["full", "extra-traits"] }

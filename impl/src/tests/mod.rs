@@ -1,15 +1,13 @@
-use colored_macro_impl::{Colored, Segment};
-
 macro_rules! colored {
     ($segments: expr) => {
-        Colored {
+        crate::Colored {
             format_args: vec![],
             segments: $segments,
         }
     };
 
     ($segments: expr, $format_args: expr) => {
-        Colored {
+        crate::Colored {
             format_args: $format_args,
             segments: $segments,
         }
@@ -18,17 +16,17 @@ macro_rules! colored {
 
 macro_rules! text {
     ($text: literal) => {
-        Segment::Text(None, $text.to_owned())
+        crate::Segment::Text(None, $text.to_owned())
     };
 
     ($text: literal, $tag: literal) => {
-        Segment::Text(Some($tag.to_owned()), $text.to_owned())
+        crate::Segment::Text(Some($tag.to_owned()), $text.to_owned())
     };
 }
 
 macro_rules! end {
     ($tag: literal) => {
-        Segment::StyleEnd($tag.to_owned())
+        crate::Segment::StyleEnd($tag.to_owned())
     };
 }
 
@@ -37,7 +35,7 @@ macro_rules! parses_to {
         let tokens = format!("\"{}\"", $input)
             .parse::<proc_macro2::TokenStream>()
             .unwrap();
-        assert_eq!(syn::parse2::<Colored>(tokens).unwrap(), $expected)
+        assert_eq!(syn::parse2::<crate::Colored>(tokens).unwrap(), $expected)
     };
 }
 

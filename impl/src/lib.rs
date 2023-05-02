@@ -1,20 +1,29 @@
+//! This crate implements the macro for `colored_macro` and should not be used directly.
+
+use proc_macro2::TokenStream;
 use ansi::RESET;
 use parser::Element;
-use proc_macro2::TokenStream;
 use syn::{
     parse::{Parse, ParseStream, Result},
     token::Comma,
     Expr, LitStr,
+    parse2
 };
 
 use crate::{ansi::style_to_ansi_code, parser::parse_tags};
-
 mod ansi;
 mod parser;
+#[cfg(test)]
+mod tests;
+
+#[doc(hidden)]
+pub fn colored_macro(item: TokenStream) -> Result<TokenStream> {
+    Ok(process(parse2(item)?))
+}
 
 /// A segment is like a token, it can either be optionally styled text or a style end tag.
 #[derive(Debug, PartialEq)]
-pub enum Segment {
+pub(crate) enum Segment {
     /// (Style, Text)
     Text(Option<String>, String),
     /// (Style)
@@ -22,7 +31,7 @@ pub enum Segment {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Colored {
+pub(crate) struct Colored {
     /// The segments of the string literal.
     /// A segment is like a token, it can either be optionally styled text or a style end tag.
     pub segments: Vec<Segment>,
@@ -66,7 +75,7 @@ impl Parse for Colored {
     }
 }
 
-pub fn process(colored: Colored) -> TokenStream {
+pub(crate) fn process(colored: Colored) -> TokenStream {
     let mut fmt_string = String::new();
     let mut style_stack = Vec::new();
 
