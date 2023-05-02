@@ -16,7 +16,7 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-colored-macro-macro = { version = "=0.2.0", path = "macro" }
+colored-macro-macro = { version = "0.2.0", path = "macro" }
 
 [workspace]
 members = [".", "impl", "macro"]

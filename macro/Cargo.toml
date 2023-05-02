@@ -19,7 +19,7 @@ license = "MIT"
 proc-macro = true
 
 [dependencies]
-colored-macro-impl = { version = "=0.2.0", path = "../impl" }
+colored-macro-impl = { version = "0.2.0", path = "../impl" }
 proc-macro2 = "1.0"
 quote = "1.0"
 syn = { version = "2.0", features = ["full", "extra-traits"] }
