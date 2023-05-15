@@ -1,13 +1,13 @@
 //! This crate implements the macro for `colored_macro` and should not be used directly.
 
-use proc_macro2::TokenStream;
 use ansi::RESET;
 use parser::Element;
+use proc_macro2::TokenStream;
 use syn::{
     parse::{Parse, ParseStream, Result},
+    parse2,
     token::Comma,
     Expr, LitStr,
-    parse2
 };
 
 use crate::{ansi::style_to_ansi_code, parser::parse_tags};

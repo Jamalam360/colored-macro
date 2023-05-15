@@ -9,7 +9,7 @@ use syn::parse_macro_input;
 /// colored_macro is a macro that allows you to write colored text in your terminal using XML-like syntax.
 /// ```no_run no_test
 /// use colored_macro::colored_macro;
-/// 
+///
 /// fn main() {
 ///    println!("{}", colored_macro!("<red>Hello, <green>world</green>!</red>"));
 /// }
