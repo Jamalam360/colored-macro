@@ -40,8 +40,9 @@ Styles can also be nested:
 colored_macro::colored!("<red>all red <yellow>yellow <blue>now to blue</blue> back to yellow</yellow> back to red</red>")
 ```
 
+![Output of above code](https://user-images.githubusercontent.com/56727311/233061615-998b3d66-2457-4f8b-8075-6c71489b0edd.png)
+
 ### `NO_COLOR` Support
 
 The `NO_COLOR` environment variable is supported if the `no-color` feature is enabled.
 
-![Output of above code](https://user-images.githubusercontent.com/56727311/233061615-998b3d66-2457-4f8b-8075-6c71489b0edd.png)
