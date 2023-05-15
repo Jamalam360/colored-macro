@@ -77,6 +77,7 @@ impl Parse for Colored {
 
 pub(crate) fn process(colored: Colored) -> TokenStream {
     let mut fmt_string = String::new();
+    let mut no_color_string = String::new();
     let mut style_stack = Vec::new();
 
     for segment in colored.segments {
@@ -85,9 +86,11 @@ pub(crate) fn process(colored: Colored) -> TokenStream {
                 if let Some(style) = style {
                     let ansi_style = style_to_ansi_code(style);
                     fmt_string.push_str(&format!("{}{}", ansi_style, text));
+                    no_color_string.push_str(&text);
                     style_stack.push(ansi_style);
                 } else {
                     fmt_string.push_str(&text);
+                    no_color_string.push_str(&text);
                 }
             }
             Segment::StyleEnd(style) => {
@@ -118,19 +121,53 @@ pub(crate) fn process(colored: Colored) -> TokenStream {
 
     let mut output = String::new();
 
-    // Open a `format!("` call.
-    output.push_str("format!(\"");
-    output.push_str(&fmt_string);
-    // Close the `format!("` call with `"`.
-    output.push_str("\", ");
+    if cfg!(feature = "no-color") {
+        output.push_str("if std::env::var(\"NO_COLOR\").map(|v| v == \"1\").unwrap_or(false) { ");
+        // Open a `format!("` call.
+        output.push_str("format!(\"");
+        output.push_str(&no_color_string);
+        // Close the `format!("` call with `"`.
+        output.push_str("\", ");
 
-    // Push the format arguments.
-    for arg in colored.format_args {
-        output.push_str(&arg);
-        output.push_str(", ");
+        // Push the format arguments.
+        for arg in &colored.format_args {
+            output.push_str(arg);
+            output.push_str(", ");
+        }
+
+
+        output.push_str(") } else {");
+
+        // Open a `format!("` call.
+        output.push_str("format!(\"");
+        output.push_str(&fmt_string);
+        // Close the `format!("` call with `"`.
+        output.push_str("\", ");
+
+        // Push the format arguments.
+        for arg in &colored.format_args {
+            output.push_str(arg);
+            output.push_str(", ");
+        }
+
+        // Close the `format!` call
+        output.push_str(") }");
+    } else {
+        // Open a `format!("` call.
+        output.push_str("format!(\"");
+        output.push_str(&fmt_string);
+        // Close the `format!("` call with `"`.
+        output.push_str("\", ");
+
+        // Push the format arguments.
+        for arg in colored.format_args {
+            output.push_str(&arg);
+            output.push_str(", ");
+        }
+
+        // Close the `format!` call
+        output.push(')');
     }
 
-    // Close the `format!` call
-    output.push(')');
     output.parse().unwrap()
 }

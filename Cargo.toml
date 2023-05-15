@@ -18,6 +18,9 @@ license = "MIT"
 [dependencies]
 colored-macro-macro = { version = "^0.2.0", path = "macro" }
 
+[features]
+no-color = ["colored-macro-macro/no-color"]
+
 [workspace]
 members = [".", "impl", "macro"]
 default-members = [".", "impl"]
