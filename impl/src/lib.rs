@@ -135,7 +135,6 @@ pub(crate) fn process(colored: Colored) -> TokenStream {
             output.push_str(", ");
         }
 
-
         output.push_str(") } else {");
 
         // Open a `format!("` call.
